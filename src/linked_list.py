@@ -20,28 +20,37 @@ class LinkedList:
     def print_in_reverse(self):
         pass
 
-    def __init__(self):
+    def __init__(self, values: list = []):
         self.head: Node | None = None
-        
+        for value in values:
+            self.append(value)
+
     def insert_at_beginning(self, data) -> None:
         newNode = Node(data)
         if self.head is not None:
             newNode.next = self.head
         self.head = newNode
+
+    def length(self) -> int:
+        length: int = 0
+
+        current_node = self.head
+        while current_node is not None:
+            current_node = current_node.next
+            length += 1
+
+        return length
     
-    # Looks really ugly
-    def insert_at_end(self, data) -> None:
+    def append(self, data) -> None:
         if self.head is None:
             return self.insert_at_beginning(data)
          
         current_node: Node = self.head
+        next_node: Node | None = self.head.next
 
-        if isinstance(self.head.next, Node):
-            next_node: Node = self.head.next
-
-            while next_node.next is not None:
-                current_node = next_node
-                next_node = next_node.next
+        while next_node is not None:
+            current_node = next_node
+            next_node = next_node.next
 
         newNode = Node(data)
         current_node.next = newNode
@@ -53,7 +62,7 @@ class LinkedList:
         self.head = self.head.next
         return removed_value
     
-    def remove_last_node(self) -> int:
+    def pop(self) -> int:
         if self.head is None:
             raise IndexError("can't remove an item from an empty list.")
         if self.head.next is None:
@@ -71,13 +80,38 @@ class LinkedList:
        
         return removed_value
     
-    def remove(self, position) -> None:
-        #pode alterar a forma que o index funciona?
-        pass
-    
-    def insert(self, position, value) -> None:
-        pass
-           
+    def remove_item(self, index: int) -> None:
+        if index == 0:
+            return self.remove_first_node()
+
+        if index > self.length():
+            raise IndexError("index bigger than list.")
+        
+        current_node: Node = self.head
+        next_node: Node = self.head.next
+        
+        for _ in range(index - 1):
+            current_node = next_node
+            next_node = next_node.next
+        
+        current_node.next = next_node.next
+        return next_node.data
+
+    def insert(self, index, value) -> None:
+        if index == 0:
+            return self.insert_at_beginning
+
+        current_node: Node = self.head
+        next_node: Node = self.head.next
+
+        for _ in range(index - 1):
+            current_node = next_node
+            next_node = next_node.next
+        
+        new_node = Node(value)
+        current_node.next = new_node
+        new_node.next = next_node
+
     def __str__(self) -> str:
         output = "["
 
@@ -85,13 +119,39 @@ class LinkedList:
 
         while current_node is not None:
             output += f"{current_node.data}"
-            if current_node.next is None:
+            if current_node.next is not None:
                 output += ", "
             current_node = current_node.next
         output += "]"
         return output
 
+    def __getitem__(self, index: int) -> int:
+        if index - 1 > self.length:
+            raise IndexError("index biggen than list")
+        
+        current_node = self.head
+        for i in range(index):
+            current_node = current_node.next
+
+        return current_node.data
+
+
+    def __setitem__(self, index: int, value: int):
+        if index - 1 > self.length:
+            raise IndexError("index biggen than list")
+        
+        current_node = self.head
+        for i in range(index):
+            current_node = current_node.next
+
+        current_node.data = value
 
 lista = LinkedList()
-lista.insert_at_beginning(5)
+lista.append(5)
+print(lista.head.data)
+lista.append(6)
+print(lista.head.data)
+lista.append(15)
+print(lista.head.data)
+print(lista.length())
 print(lista)
