@@ -2,13 +2,24 @@
 # if is circular
 # remove all equal
 # printinreverse
-
 class Node:
     def __init__(self, data: int, next: "Node | None" = None):
         self.data: int = data
         self.next: Node | None = next
 
 class LinkedList:
+    def nth_by_tail(self, index):
+        pass
+
+    def is_circular(self):
+        pass 
+
+    def remove_similar(self, item_to_remove):
+        pass
+
+    def print_in_reverse(self):
+        pass
+
     def __init__(self):
         self.head: Node | None = None
         
@@ -81,7 +92,6 @@ class LinkedList:
         return output
 
 
-    lista = LinkedList()
-    lista.insert_at_beginning(5)
-    print(lista)
-    list
+lista = LinkedList()
+lista.insert_at_beginning(5)
+print(lista)
