@@ -80,7 +80,7 @@ class LinkedList:
        
         return removed_value
     
-    def remove_item(self, index: int) -> None:
+    def remove_item(self, index: int) -> int:
         if index == 0:
             return self.remove_first_node()
 
@@ -99,7 +99,7 @@ class LinkedList:
 
     def insert(self, index, value) -> None:
         if index == 0:
-            return self.insert_at_beginning
+            return self.insert_at_beginning(value)
 
         current_node: Node = self.head
         next_node: Node = self.head.next
