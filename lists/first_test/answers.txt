@@ -1,0 +1,21 @@
+1.
+F
+V
+F
+V
+F
+F
+V
+V  #f
+V  #f
+
+2. 
+O(n)
+O(log(n))
+O(nlog(n))
+O(nlog(n))
+O(n^2)
+O(n^2logn)
+
+3. 
+
