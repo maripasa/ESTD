@@ -68,7 +68,33 @@ def somaDigito(number: int) -> int:
 print(somaDigito(28347289684012))
 
 def zeraPares(number: int) -> int:
-    return number
+    return number*(number%2) if number<10 else zeraPares(number//10)*10 + (number%10) * (number%2)
 
 print(zeraPares(28347289684012))
+# 307009000010
+
+def zeraImpares(number: int) -> int:
+    return number*((number-1)%2) if number<10 else zeraImpares(number//10)*10 + (number%10) * ((number+1)%2)
+
+print(zeraImpares(28347289684012))
+# 28040280684002
+
+def removePares(number: int) -> int:
+    return number*(number%2) if number<10 else removePares(number//10)*(10 - (9 * ((number+1)%2))) + (number%10) * (number%2)
+
+print(removePares(28347289684012))
+print(removePares(13579315973))
+print(removePares(13579316973))
+# 3791
+
+""" Crie uma função recursiva para verificar se uma string tem mais vogais do que consoantes. """
+def has_more_vowels(input: str) -> bool:
+    def count_vowels(input: str) -> int:
+        return 0 if not input else (1 if input[0].lower() in "aeiou" else 0) + count_vowels(input[1:])
+    def count_consonants(input: str) -> int:
+        return 0 if not input else (1 if input[0].lower() not in "aeiou" else 0) + count_consonants(input[1:])
+    return count_vowels(input) > count_consonants(input)
+
+print(has_more_vowels("string"))
+
 
