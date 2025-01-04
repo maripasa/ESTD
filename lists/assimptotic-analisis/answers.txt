@@ -18,6 +18,7 @@ F
 F
 V
 F
+
 4. 
 40n^2 = 2n^3
 40 = 2n
@@ -30,7 +31,12 @@ n^2
 nlogn
 
 7.
-1111111111
-111111111
-
+podemos converter a quantidade de garrafas para binario:
+cada provador vai provar das seguintes garrafas:
+provador 1: em que o bit 1 (da direita para a esquerda) (menos significativo) está em estado alto (1)
+provador 2: em que o bit 2 está em estado alto
+.
+.
+.
+Assim, após um mês, podemos juntar os bits baseados nos provadores que morreram
 
