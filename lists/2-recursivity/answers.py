@@ -3,19 +3,55 @@ Qual é a complexidade do seu algoritmo? Desenhe a árvore de recursão. """
 
 def biggest_element(numbers: list) -> int:
     return numbers[0] if len(numbers) == 1 else biggest_element(numbers[1:]) if biggest_element(numbers[1:]) > numbers[0] else numbers[0]
+"""
+Infelizmente fiz eu uma linha pq ia ser engraçado, então a complexidade é O(n^2)
+biggest_element([a, b, c, d])
+├── biggest_element([b, c, d])
+│     ├── biggest_element([c, d])
+│     │     ├── biggest_element([d])
+│     │     └── Compare: biggest_element([d]) > c ? biggest_element([d]) : c
+│     └── Compare: biggest_element([c, d]) > b ? biggest_element([c, d]) : b
+└── Compare: biggest_element([b, c, d]) > a ? biggest_element([b, c, d]) : a
 
-# althought this could be made
-def biggest_element_2(numbers: list) -> int:
-    return max(numbers)
-
-# or even
-def biggest_element_3(numbers: list) -> int:
-    return sorted(numbers)[-1]
-
+os biggest_element das comparações trazem... mais recursões.
+"""
 print(biggest_element([2,5,7,3,2,6,1,23,5,4,76]))
 
 """ Faça um diagrama das chamadas recursivas de uma função que resolve o problema das torres de hanoi. """
-# depois pq da trabalho
+def hanoi(n: int, start: int, end: int) -> None:
+    if start < 1 or start > 3:
+        raise ValueError("Invalid start")
+    if end < 1 or end > 3:
+        raise ValueError("Invalid end")
+    if start == end:
+        raise ValueError("start can't be equal to end")
+    if n < 1:
+        raise ValueError("n cannot be less then 1")
+    if n == 1:
+        print(start, "->", end)
+        return
+    hanoi(n-1, start, 6 - (start + end))
+    hanoi(1, start, end)
+    hanoi(n-1, 6 - (start + end), end)
+
+print(hanoi(9, 1, 3))
+
+"""
+Move 3 disks from A to C using B:
+  ├── Move 2 disks from A to B using C:
+  │   ├── Move 1 disk from A to C using B:
+  │   │   └── Move disk 1 from A to C
+  │   └── Move disk 2 from A to B
+  │   └── Move 1 disk from C to B using A:
+  │       └── Move disk 1 from C to B
+  ├── Move disk 3 from A to C
+  └── Move 2 disks from B to C using A:
+      ├── Move 1 disk from B to A using C:
+      │   └── Move disk 1 from B to A
+      └── Move disk 2 from B to C
+      └── Move 1 disk from A to C using B:
+          └── Move disk 1 from A to C
+"""
 
 """ Escreva um algoritmo recursivo que organize uma sequência de inteiros de tal forma que os valores pares apareçam
 antes do que os ímpares. """
@@ -97,4 +133,51 @@ def has_more_vowels(input: str) -> bool:
 
 print(has_more_vowels("string"))
 
+"""Implemente o algoritmo de busca binária em um vetor de inteiros ordenado."""
+def binary_search(key: int, input: list[int]) -> int | None:
+    if len(input) == 0:
+        return None
+    
+    mid = len(input) // 2
+    if input[mid] == key:
+        return mid
+    elif input[mid] > key:
+        result = binary_search(key, input[:mid])
+        if result is None:
+            return None
+        return result
+    else:
+        result = binary_search(key, input[mid+1:])
+        if result is None:
+            return None
+        return mid + 1 + result
 
+"""Dados um vetor de inteiros distintos e ordenados de maneira crescente e um inteiro target, crie um algoritmo recursivo que determine se existem dois inteiros no vetor que a soma seja igual a target."""
+def find_inner_sum(target: int, input: list[int]) -> bool:
+    def helper(start: int, end: int) -> bool:
+        if start >= end:
+            return False
+        total = input[start] + input[end]
+        if total == target:
+            return True
+        elif total < target:
+            return helper(start + 1, end)
+        else:
+            return helper(start, end - 1)
+
+    if len(input) < 2:
+        raise ValueError("Too small of a list, make it > 2")
+    
+    return helper(0, len(input) - 1)
+
+print(find_inner_sum(7, [1, 2, 3, 4, 5, 6, 7, 8]))
+
+"""Dado um array S não ordenado de inteiros e um inteiro k, crie um algoritmo recursivo para reorganizar os elementos de S tal que todos os elementos menores ou iguais a K apareçam antes do que os elementos maiores."""
+
+def funny_sort(k: int, s: list[int]) -> list[int]:
+    if len(s) <= 1: return s
+    return [s[0]] + funny_sort(k, s[1:]) if s[0] <= k else funny_sort(k, s[1:]) + [s[0]] 
+
+print(funny_sort(3, [1,2,3,4,5,6,7,8]))
+print(funny_sort(3, [3,4,5,6,7,8]))
+    
