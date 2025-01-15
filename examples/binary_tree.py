@@ -32,17 +32,17 @@ class AVLTree:
     
     def rotate_left(self, node) -> BinaryNode:
         y = node.right
-        T2 = y.left
+        t2 = y.left
         y.left = node
-        node.right = T2
+        node.right = t2
 
         return y
 
     def rotate_right(self, node) -> BinaryNode:
         y = node.left
-        T3 = y.right
+        t3 = y.right
         y.right = node
-        node.left = T3
+        node.left = t3
 
         return y
 
