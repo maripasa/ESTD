@@ -11,6 +11,10 @@ class BinaryNode:
         self.left = left
         self.right = right
     
+class RBTree:
+    def __init__(self):
+        self.root: Optional[BinaryNode] = None
+
 
 class AVLTree:
     def __init__(self):
@@ -26,16 +30,15 @@ class AVLTree:
     def balance(self, node) -> int:
         if node is None:
             return 0
-        left = 0 if node.left is None else self.height(node.left)
-        right = 0 if node.right is None else self.height(node.right)
-        return left - right
-    
+        left_height = self.height(node.left)
+        right_height = self.height(node.right)
+        return left_height - right_height
+
     def rotate_left(self, node) -> BinaryNode:
         y = node.right
         t2 = y.left
         y.left = node
         node.right = t2
-
         return y
 
     def rotate_right(self, node) -> BinaryNode:
@@ -43,20 +46,20 @@ class AVLTree:
         t3 = y.right
         y.right = node
         node.left = t3
-
         return y
 
     def insert(self, key: int, value=None) -> None:
         def insert(node: Optional[BinaryNode]) -> BinaryNode:
             if node is None:
                 return BinaryNode(key, value)
-            if key > node.key:
-                node.right = insert(node.right)
             if key < node.key:
                 node.left = insert(node.left)
+            elif key > node.key:
+                node.right = insert(node.right)
+            else:
+                node.value = value
 
             balance = self.balance(node)
-
             if node.left is not None:
                 if balance > 1 and key < node.left.key:
                     return self.rotate_right(node)
@@ -72,38 +75,55 @@ class AVLTree:
                 if balance < -1 and key < node.right.key:
                     node.right = self.rotate_right(node.right)
                     return self.rotate_left(node)
-            
             return node
 
         self.root = insert(self.root)
 
-    def __repr__(self) -> str:
-        def repr(node: Optional[BinaryNode]) -> str:
+    def remove(self, key: int) -> None:
+        def remove(node: Optional[BinaryNode], delete_key: int) -> Optional[BinaryNode]:
             if node is None:
-                return " \n"
+                raise KeyError("Item not in list")
+            if delete_key < node.key:
+                node.left = remove(node.left, delete_key)
+            if delete_key > node.key:
+                node.right = remove(node.right, delete_key)
 
-            result = str(node.key) + "\n"
+            if delete_key == node.key:
+                if node.left is None and node.right is None:
+                    return None
 
-            right = repr(node.right).splitlines()
-            left = repr(node.left).splitlines()
+                if node.left is None:
+                    return node.right
 
-            result += "├── " + str(left.pop(0)) + "\n"
-            for i in left:
-                result += "│   " + str(i) + "\n"
+                if node.right is None:
+                    return node.left
 
-            result += "└── " + str(right.pop(0)) + "\n"
-            for i in right:
-                result += "    " + str(i) + "\n"
+                successor = node.right
+                while successor.left is not None:
+                    successor = successor.left
 
-            return result
+                node.key = successor.key
+                node.value = successor.value
+                node.right = remove(node.right, successor.key)
 
-        return repr(self.root)
+            balance = self.balance(node)
+            if balance > 1:
+                left_balance = self.balance(node.left)
+                if left_balance >= 0:
+                    return self.rotate_right(node)
+                else:
+                    node.left = self.rotate_left(node.left)
+                    return self.rotate_right(node)
+            elif balance < -1:
+                right_balance = self.balance(node.right)
+                if right_balance <= 0:
+                    return self.rotate_left(node)
+                else:
+                    node.right = self.rotate_right(node.right)
+                    return self.rotate_left(node)
+            return node
 
-test = AVLTree()
-x = [4, 6, 2, 1, 3, 5, 7]
-y = [2, 1, 3]
-for i in range(100):
-    test.insert(i)
-
-print(test)
-
+        try:
+            self.root = _remove(self.root, key)
+        except KeyError:
+            pass
